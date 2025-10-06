@@ -14,3 +14,4 @@ passlib[bcrypt]
 streamlit
 requests
 PyPDF2
+langchain-openai
