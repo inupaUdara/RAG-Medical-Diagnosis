@@ -7,7 +7,7 @@ load_dotenv()
 MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = os.getenv("DB_NAME", "rbac-diagnosis")
 
-client = MongoClient(MONGO_URI)
+client = MongoClient(MONGO_URI,tls=True, tlsAllowInvalidCertificates=True)
 db = client[DB_NAME]
 
 users_collection = db["users"]

@@ -1,21 +1,18 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from typing import List
-import uuid
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from ..auth.route import authenticate
-from ..config.db import reports_collection
 from .vectorstore import load_vectorstore
+import uuid
+from typing import List
+from ..config.db import reports_collection
 
-router = APIRouter(prefix="/reports", tags=["reports"])
+
+router=APIRouter(prefix="/reports",tags=["reports"])
 
 @router.post("/upload")
-async def upload_reports(
-    files: List[UploadFile] = File(...),
-    user=Depends(authenticate)
-):
-    if user["role"] != "patient":
-        raise HTTPException(status_code=403, detail="Not authorized to upload reports")
-
-    doc_id = str(uuid.uuid4())
-    await load_vectorstore(files, uploaded=user["username"], doc_id=doc_id)
-
-    return {"message": "Reports uploaded successfully", "doc_id": doc_id}
+async def upload_reports(user=Depends(authenticate),files:List[UploadFile]=File(...)):
+    if user["role"] !="patient":
+        raise HTTPException(status_code=403,detail="Only patients can upload reports for diagnosis")
+    
+    doc_id=str(uuid.uuid4())
+    await load_vectorstore(files,uploaded=user["username"],doc_id=doc_id)
+    return {"message":"Uploaded and indexed","doc_id":doc_id}
