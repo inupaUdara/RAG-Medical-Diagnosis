@@ -9,7 +9,7 @@ class UserOut(BaseModel):
 
 class ReportMeta(BaseModel):
     doc_id: str
-    filename: str
+    filename: Optional[str]
     uploader: str
     uploaded_at: float
     num_chunks: int
@@ -18,6 +18,6 @@ class DiagnosisRecord(BaseModel):
     doc_id: str
     requester: str
     question: str
-    answer: str
-    source : Optional[List] = []
+    answer: Optional[str]
+    sources: Optional[List[str]] = Field(default_factory=list)
     timestamp: float = Field(default_factory=lambda: time.time())
